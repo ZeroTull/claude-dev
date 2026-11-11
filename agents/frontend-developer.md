@@ -90,7 +90,7 @@ At the start of each new project or feature, ask me the following before diving 
 
 ## PR Review Loop Protocol
 
-You participate in an automated PR review loop with the code-reviewer agent. This loop runs up to 10 cycles without requiring user approval at each step.
+You participate in an automated PR review loop with the code-reviewer agent. This loop runs up to 20 cycles (see `CLAUDE.md` step 4) without requiring user approval at each step.
 
 **Step 1 — When implementation is complete, create the PR immediately. Do not ask for permission:**
 ```bash
@@ -108,21 +108,19 @@ EOF
 
 **Step 2 — When the reviewer posts comments, resolve them automatically. Do not ask for permission:**
 1. Fetch all review comments: `gh pr view <pr-number> --comments`
-2. Address every comment — edit components, fix or add tests, adjust styles
+2. Address every Blocker and High Priority Issue — edit components, fix or add tests, adjust styles. Medium Priority Suggestions are optional: do not fix them here; they go into the Step 4 cheap-fix commit or are declined with a reason in a PR comment
 3. Commit and push the changes
 4. Signal readiness for re-review:
    ```bash
    gh pr review <pr-number> --comment -b "All comments addressed. Ready for re-review. (Cycle N)"
    ```
 
-**Step 3 — Iteration gate. Check this before every resolve cycle:**
-```bash
-ITERATIONS=$(gh pr view <pr-number> --json reviews --jq '.reviews | length')
-```
+**Step 3 — Iteration gate (runs before Step 2 of every cycle):**
+Use the cycle number from the review ("cycle N of 20", which the main session passes to the reviewer and the report repeats); do not count GitHub reviews or comments. If the report has no cycle number, do not infer one: stop and ask the user.
 - Cycles 1–19: proceed automatically without asking the user.
-- Cycle 20: **STOP immediately.** Output this exact message and wait:
-  > **"PR review loop has reached 20 cycles. Pausing — do you want me to continue resolving comments, or would you like to take over?"**
+- Cycle 20 or later, if the report still has a Blocker or High Priority Issue: **STOP immediately.** Output this exact message and wait:
+  > **"PR review loop has reached 20 cycles. Pausing — continue, or take over?"**
   Do not touch any code or post any comment until the user explicitly says to continue.
 
-**Step 4 — When the reviewer approves:**
-Announce the approval. Do NOT merge without an explicit user instruction to do so.
+**Step 4 — When the reviewer's report shows 0 Blockers and 0 High Priority Issues (the loop stops here, per `CLAUDE.md` step 4):**
+Make the optional cheap-fix commit for Medium Priority Suggestions, wait for a green pipeline, then announce the approval. Do NOT merge without an explicit user instruction to do so.

@@ -334,6 +334,16 @@ if settings is not None:
     if wild:
         err(f"settings.json denies .env templates via {', '.join(wild)}")
 
+# The review loop's pause message must read the same in CLAUDE.md and every agent that runs the loop.
+PAUSE = "PR review loop has reached 20 cycles. Pausing — continue, or take over?"
+for path in ("CLAUDE.md", "agents/code-reviewer.md", "agents/backend-architect.md", "agents/frontend-developer.md"):
+    try:
+        with open(os.path.join(repo, path), encoding="utf-8") as f:
+            if PAUSE not in f.read():
+                err(f"{path}: review loop pause message differs from the CLAUDE.md wording")
+    except FileNotFoundError:
+        err(f"{path}: missing")
+
 for e in errors:
     print(f"FAIL: {e}")
 if errors:

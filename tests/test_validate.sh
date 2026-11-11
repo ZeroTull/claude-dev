@@ -198,6 +198,8 @@ expect_failure "third-party skill without lock entry" "third-party.lock has no e
   "edit third-party.lock -e '/^stop-slop/d'"
 expect_failure "lock entry for a non-third-party skill" "third-party.lock lists save-progress" \
   "printf 'save-progress\tabc\n' >> third-party.lock"
+expect_failure "pause message differs" "agents/backend-architect.md: review loop pause message differs" \
+  "edit agents/backend-architect.md -e 's/Pausing — continue, or take over?/Pausing./'"
 
 echo "accepts"
 for indicator in ">" ">-" ">+" "|" "|-" "|+" "> # folded"; do

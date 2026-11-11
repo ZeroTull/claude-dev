@@ -133,13 +133,11 @@ EOF
    ```
 
 **Step 3 — Iteration gate. Check this before every resolve cycle:**
-```bash
-ITERATIONS=$(gh pr view <pr-number> --json reviews --jq '.reviews | length')
-```
+Use the cycle number from the review ("cycle N of 20", which the main session passes to the reviewer and the report repeats); do not count GitHub reviews or comments.
 - Cycles 1–19: proceed automatically without asking the user.
-- Cycle 20: **STOP immediately.** Output this exact message and wait:
-  > **"PR review loop has reached 20 cycles. Pausing — do you want me to continue resolving comments, or would you like to take over?"**
+- Cycle 20, if the report still has a Blocker or High Priority Issue: **STOP immediately.** Output this exact message and wait:
+  > **"PR review loop has reached 20 cycles. Pausing — continue, or take over?"**
   Do not touch any code or post any comment until the user explicitly says to continue.
 
 **Step 4 — When the reviewer's report shows 0 Blockers and 0 High Priority Issues (the loop stops here, per `CLAUDE.md` step 4):**
-Announce the approval. Do NOT merge without an explicit user instruction to do so.
+Make the optional cheap-fix commit for Medium Priority Suggestions, wait for a green pipeline, then announce the approval. Do NOT merge without an explicit user instruction to do so.

@@ -31,6 +31,8 @@ You enforce Test-Driven Development on every review. Your job is to ensure tests
 - Tests only cover the happy path with no edge cases or error conditions.
 - Tests are so tightly coupled to implementation details that they break on any internal refactor (testing the *what* instead of the *why*).
 
+Docs-only changes, as `CLAUDE.md` defines them, need no tests; missing tests are not a blocker for them.
+
 **Signals that tests were written after implementation (flag these explicitly):**
 - Tests that trivially pass and assert nothing meaningful (e.g., `expect(true).toBe(true)`).
 - Test descriptions that read like implementation steps rather than behavior specifications.
@@ -118,5 +120,5 @@ You are one step of the review loop in `CLAUDE.md` (up to 20 cycles). You do not
 1. Read all changed files and the full diff (`gh pr diff <n>` / `glab mr diff <n>` / `git diff <base>...HEAD`), then apply the checklist above.
 2. Return the report in the output format above as your final message. The main session posts it as a PR/MR comment (`gh pr comment` / `glab mr note`), fixes the findings, and calls you again. GitHub does not let an author approve their own PR, so approval is your verdict in the report, not a `gh pr review --approve`.
 3. On a re-review, check that every earlier finding is resolved and say so per finding, then review the new changes.
-4. Your verdict is **APPROVED WITH SUGGESTIONS** only when there are no blockers and no high-priority issues left. Medium and low suggestions do not block the merge: the caller fixes the cheap ones or declines them without another review cycle.
+4. Your verdict is **APPROVED WITH SUGGESTIONS** only when there are 0 Blockers and 0 High Priority Issues left; keep the verdict and the counts consistent. Medium Priority Suggestions do not block the merge: the caller fixes the cheap ones or declines them without another review cycle.
 5. The caller states the cycle in the prompt ("cycle N of 20"). If it is cycle 20, put this at the top of the report: "PR review loop has reached 20 cycles. Pausing - continue reviewing, or take over?" If no cycle number is given, the caller owns the cap; do not guess.

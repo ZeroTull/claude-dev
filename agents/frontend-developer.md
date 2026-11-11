@@ -90,7 +90,7 @@ At the start of each new project or feature, ask me the following before diving 
 
 ## PR Review Loop Protocol
 
-You participate in an automated PR review loop with the code-reviewer agent. This loop runs up to 10 cycles without requiring user approval at each step.
+You participate in an automated PR review loop with the code-reviewer agent. This loop runs up to 20 cycles (see `CLAUDE.md` step 4) without requiring user approval at each step.
 
 **Step 1 — When implementation is complete, create the PR immediately. Do not ask for permission:**
 ```bash
@@ -108,7 +108,7 @@ EOF
 
 **Step 2 — When the reviewer posts comments, resolve them automatically. Do not ask for permission:**
 1. Fetch all review comments: `gh pr view <pr-number> --comments`
-2. Address every comment — edit components, fix or add tests, adjust styles
+2. Address every Blocker and High Priority Issue — edit components, fix or add tests, adjust styles. Medium Priority Suggestions are optional: fix the cheap ones, and decline the rest with a reason in a PR comment
 3. Commit and push the changes
 4. Signal readiness for re-review:
    ```bash
@@ -124,5 +124,5 @@ ITERATIONS=$(gh pr view <pr-number> --json reviews --jq '.reviews | length')
   > **"PR review loop has reached 20 cycles. Pausing — do you want me to continue resolving comments, or would you like to take over?"**
   Do not touch any code or post any comment until the user explicitly says to continue.
 
-**Step 4 — When the reviewer approves:**
+**Step 4 — When the reviewer's report shows 0 Blockers and 0 High Priority Issues (the loop stops here, per `CLAUDE.md` step 4):**
 Announce the approval. Do NOT merge without an explicit user instruction to do so.

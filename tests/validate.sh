@@ -340,7 +340,7 @@ for path in ("CLAUDE.md", "agents/code-reviewer.md", "agents/backend-architect.m
     try:
         with open(os.path.join(repo, path), encoding="utf-8") as f:
             if PAUSE not in f.read():
-                err(f"{path}: review loop pause message differs from CLAUDE.md")
+                err(f"{path}: review loop pause message differs from the CLAUDE.md wording")
     except FileNotFoundError:
         err(f"{path}: missing")
 

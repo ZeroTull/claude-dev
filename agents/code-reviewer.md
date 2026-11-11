@@ -97,6 +97,7 @@ Always provide your review in this structured format:
   - **Blockers**: X
   - **High Priority Issues**: Y
   - **Medium Priority Suggestions**: Z
+  - **Missing-check reason**: (only when a rule-text change has no validator check)
 
 ## 🚨 **Blockers (Must Fix)**
 

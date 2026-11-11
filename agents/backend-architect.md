@@ -132,7 +132,7 @@ EOF
    gh pr review <pr-number> --comment -b "All comments addressed. Ready for re-review. (Cycle N)"
    ```
 
-**Step 3 — Iteration gate. Check this before Step 2 of every cycle:**
+**Step 3 — Iteration gate (runs before Step 2 of every cycle):**
 Use the cycle number from the review ("cycle N of 20", which the main session passes to the reviewer and the report repeats); do not count GitHub reviews or comments. If the report has no cycle number, do not infer one: stop and ask the user.
 - Cycles 1–19: proceed automatically without asking the user.
 - Cycle 20 or later, if the report still has a Blocker or High Priority Issue: **STOP immediately.** Output this exact message and wait:

@@ -125,17 +125,17 @@ EOF
 
 **Step 2 — When the reviewer posts comments, resolve them automatically. Do not ask for permission:**
 1. Fetch all review comments: `gh pr view <pr-number> --comments`
-2. Address every Blocker and High Priority Issue — edit code, fix or add tests, refactor. Medium Priority Suggestions are optional: fix the cheap ones, and decline the rest with a reason in a PR comment
+2. Address every Blocker and High Priority Issue — edit code, fix or add tests, refactor. Medium Priority Suggestions are optional: do not fix them here; they go into the Step 4 cheap-fix commit or are declined with a reason in a PR comment
 3. Commit and push the changes
 4. Signal readiness for re-review:
    ```bash
    gh pr review <pr-number> --comment -b "All comments addressed. Ready for re-review. (Cycle N)"
    ```
 
-**Step 3 — Iteration gate. Check this before every resolve cycle:**
-Use the cycle number from the review ("cycle N of 20", which the main session passes to the reviewer and the report repeats); do not count GitHub reviews or comments.
+**Step 3 — Iteration gate. Check this before Step 2 of every cycle:**
+Use the cycle number from the review ("cycle N of 20", which the main session passes to the reviewer and the report repeats); do not count GitHub reviews or comments. If the report has no cycle number, do not infer one: stop and ask the user.
 - Cycles 1–19: proceed automatically without asking the user.
-- Cycle 20, if the report still has a Blocker or High Priority Issue: **STOP immediately.** Output this exact message and wait:
+- Cycle 20 or later, if the report still has a Blocker or High Priority Issue: **STOP immediately.** Output this exact message and wait:
   > **"PR review loop has reached 20 cycles. Pausing — continue, or take over?"**
   Do not touch any code or post any comment until the user explicitly says to continue.
 
